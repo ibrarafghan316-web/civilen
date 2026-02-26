@@ -1,0 +1,502 @@
+/* استایل‌های اصلی - مخصوص محاسبۀ چیپس */
+:root {
+    --bg-primary: #f5f5f5;
+    --bg-card: white;
+    --text-primary: #333;
+    --text-secondary: #495057;
+    --border-color: #dee2e6;
+    --section-bg: #e9ecef;
+    --result-bg: #f8f9fa;
+    --shadow: 0 10px 30px rgba(0,0,0,0.15);
+    --gradient: linear-gradient(135deg, #16a085 0%, #1abc9c 100%);
+    --menu-bg: #34495e;
+    --menu-text: white;
+}
+
+body.dark-mode {
+    --bg-primary: #1a1a1a;
+    --bg-card: #2d2d2d;
+    --text-primary: #f5f5f5;
+    --text-secondary: #adb5bd;
+    --border-color: #404040;
+    --section-bg: #363636;
+    --result-bg: #333333;
+    --shadow: 0 10px 30px rgba(0,0,0,0.5);
+    --menu-bg: #2c3e50;
+    --menu-text: #ecf0f1;
+    --gradient: linear-gradient(135deg, #16a085 0%, #117a65 100%);
+}
+
+body {
+    background-color: var(--bg-primary);
+    font-family: 'Tahoma', 'Segoe UI', system-ui, sans-serif;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: var(--text-primary);
+}
+
+/* ========== منوی بالای اصلی ========== */
+.top-menu {
+    width: 100%;
+    max-width: 1200px;
+    background: var(--menu-bg);
+    color: var(--menu-text);
+    padding: 10px 20px;
+    border-radius: 50px 50px 0 0;
+    margin-bottom: 5px;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+}
+
+.menu-items {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.menu-item {
+    font-weight: 600;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+}
+
+.menu-item:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+
+.language-select, .currency-select {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.language-select option, .currency-select option {
+    background: var(--menu-bg);
+    color: white;
+}
+
+/* ========== کارت اصلی ========== */
+.calculator-card {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border-radius: 0 0 15px 15px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========== دکمه حالت تاریک ========== */
+.dark-mode-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: var(--gradient);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+}
+
+.dark-mode-toggle:hover {
+    transform: scale(1.1);
+}
+
+/* ========== هدر ========== */
+.header {
+    background: var(--gradient);
+    color: white;
+    padding: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.exchange-rate input {
+    width: 80px;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+}
+
+.exchange-rate input:focus {
+    background: rgba(255,255,255,0.3);
+    color: white;
+}
+
+/* ========== دکمه تاریخچه ========== */
+.history-btn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.history-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.05);
+}
+
+/* ========== انتخابگر واحد ========== */
+.unit-selector {
+    background-color: var(--section-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* ========== بخش‌ها ========== */
+.section-title {
+    background-color: var(--section-bg);
+    padding: 10px 15px;
+    margin: 0;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.content {
+    padding: 15px;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.input-group-text {
+    background-color: var(--section-bg);
+    font-weight: 500;
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.form-control, .form-select {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    box-shadow: 0 0 0 0.25rem rgba(22, 160, 133, 0.25);
+}
+
+/* ========== دکمه‌های اقدام ========== */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    flex: 1;
+    min-width: 80px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background: var(--section-bg);
+    transform: translateY(-2px);
+}
+
+.btn-calculate {
+    flex: 2;
+    background: var(--gradient);
+    border: none;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-calculate:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(22, 160, 133, 0.4);
+}
+
+.btn-calculate:active {
+    transform: translateY(0);
+    animation: pulse 0.3s ease;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* ========== جدول نتایج ========== */
+.result-table {
+    background-color: var(--result-bg);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px;
+    border: 1px solid var(--border-color);
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.result-table table {
+    margin-bottom: 0;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.result-table th {
+    background-color: var(--section-bg);
+    font-weight: 600;
+    color: var(--text-primary);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.result-table td {
+    padding: 8px;
+    color: var(--text-primary);
+}
+
+.table-active {
+    background-color: rgba(22, 160, 133, 0.2) !important;
+    font-weight: 600;
+}
+
+/* ========== نمودار ========== */
+.chart-container {
+    height: 250px;
+    padding: 15px;
+    background-color: var(--result-bg);
+    border-radius: 10px;
+    margin: 15px;
+    border: 1px solid var(--border-color);
+}
+
+/* ========== تبدیل واحدها ========== */
+.unit-toggle {
+    background-color: var(--section-bg);
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.unit-toggle:hover {
+    background-color: var(--border-color);
+    transform: scale(1.02);
+}
+
+.unit-toggle .badge {
+    background-color: #6c757d;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.unit-toggle .badge:hover {
+    background-color: #495057;
+}
+
+/* ========== تاریخچه ========== */
+.history-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.history-item {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-item:hover {
+    background-color: var(--section-bg);
+}
+
+.history-item small {
+    color: #6c757d;
+    font-size: 0.8rem;
+}
+
+.history-item strong {
+    color: var(--text-primary);
+}
+
+/* ========== فوتر ========== */
+.footer-info {
+    background-color: var(--section-bg);
+    padding: 10px 15px;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.8rem;
+    color: #6c757d;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ========== RTL و جهت ========== */
+.rtl {
+    direction: rtl;
+}
+
+.text-left {
+    text-align: left;
+}
+
+/* ========== هشدارها ========== */
+.alert {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    min-width: 300px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        top: -100px;
+        opacity: 0;
+    }
+    to {
+        top: 20px;
+        opacity: 1;
+    }
+}
+
+/* ========== رسپانسیو ========== */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .header h1 {
+        font-size: 1.3rem;
+    }
+    
+    .menu-items {
+        justify-content: center;
+    }
+    
+    .action-buttons {
+        flex-wrap: wrap;
+    }
+    
+    .action-btn, .btn-calculate {
+        flex: 1 1 100%;
+    }
+    
+    .chart-container {
+        height: 200px;
+    }
+    
+    .result-table {
+        max-height: 300px;
+    }
+}
+
+@media (max-width: 576px) {
+    .top-menu {
+        border-radius: 20px 20px 0 0;
+    }
+    
+    .menu-items {
+        gap: 10px;
+    }
+    
+    .menu-item {
+        font-size: 0.9rem;
+    }
+}
+
+/* ========== اسکرول بار ========== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--section-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* ========== چاپ ========== */
+@media print {
+    .top-menu, .dark-mode-toggle, .action-buttons, .unit-toggle, .footer-info, .history-btn {
+        display: none !important;
+    }
+    
+    .calculator-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="prs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chips Quantity Calculator</title>
+    
+    <!-- Bootstrap 5 RTL -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <!-- استایل سفارشی -->
+    <link rel="stylesheet" href="chips-style.css">
+</head>
+<body class="rtl">
+    <!-- دکمه حالت تاریک -->
+    <button class="dark-mode-toggle" id="darkModeToggle" onclick="toggleChipsDarkMode()">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- منوی بالای اصلی -->
+    <div class="top-menu">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="menu-items">
+                        <span class="menu-item" id="menuQuantity">مقدار</span>
+                        <span class="menu-item" id="menuRcc">RCC</span>
+                        <span class="menu-item" id="menuArea">مساحت</span>
+                        <span class="menu-item" id="menuVolume">حجم</span>
+                        <span class="menu-item" id="menuConvert">تبدیل</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-left">
+                    <!-- انتخاب زبان -->
+                    <select id="chipsLanguageSelect" class="language-select" onchange="changeChipsLanguage(this.value)">
+                        <option value="prs">🇦🇫 دری</option>
+                        <option value="pus">🇦🇫 پښتو</option>
+                        <option value="eng">🇬🇧 English</option>
+                    </select>
+                    
+                    <!-- انتخاب واحد پول -->
+                    <select id="chipsCurrencySelect" class="currency-select" onchange="changeChipsCurrencyType(this.value)">
+                        <option value="AFN">؋ افغانی</option>
+                        <option value="USD">$ دالر</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="calculator-card" id="calculator-card">
+        <!-- هدر -->
+        <div class="header">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <h1 id="appTitle">محاسبۀ مقدار چیپس</h1>
+                <div class="d-flex gap-3 align-items-center">
+                    <!-- دکمه تاریخچه -->
+                    <button class="history-btn" onclick="showChipsHistory()">
+                        <i class="fas fa-history"></i> <span id="historyBtn">تاریخچه</span>
+                    </button>
+                </div>
+            </div>
+            <p class="mt-2" id="appSubtitle">محاسبۀ مقدار سیمنت، چیپس، سنگ‌دست و قیمت برای پوشش چیپس</p>
+            
+            <!-- نرخ ارز -->
+            <div class="exchange-rate mt-2">
+                <small id="exchangeRateLabel">نرخ دالر:</small>
+                <input type="number" id="exchangeRate" value="85" min="1" step="1" class="form-control form-control-sm d-inline-block w-auto" onchange="updateChipsExchangeRate()">
+                <small>؋</small>
+            </div>
+        </div>
+
+        <!-- انتخاب واحد طول و نوع چیپس -->
+        <div class="unit-selector p-3 bg-light">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <label class="form-label" id="lengthUnitLabel">واحد طول:</label>
+                    <select class="form-select" id="lengthUnit" onchange="changeChipsLengthUnit()">
+                        <option value="m" id="meterOption">متر (m)</option>
+                        <option value="cm" id="cmOption">سانتیمتر (cm)</option>
+                        <option value="ft" id="ftOption">فوت (ft)</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" id="chipsTypeLabel">نوع چیپس:</label>
+                    <select class="form-select" id="chipsType">
+                        <option value="marble" selected id="marbleChipsOption">چیپس مرمر</option>
+                        <option value="granite" id="graniteChipsOption">چیپس گرانیت</option>
+                        <option value="quartz" id="quartzChipsOption">چیپس کوارتز</option>
+                        <option value="mixed" id="mixedChipsOption">چیپس مخلوط</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" id="quantityLabel">تعداد:</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="quantity" value="1" step="1" min="1">
+                        <span class="input-group-text">عدد</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ابعاد دیوار -->
+        <h5 class="section-title" id="wallDimensionsTitle">
+            <i class="fas fa-arrows-alt-h me-2"></i>ابعاد دیوار
+        </h5>
+        <div class="content">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label" id="lengthLabel">درازا</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="wallLength" value="4" step="0.01" min="0">
+                        <span class="input-group-text unit-length">m</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" id="widthLabel">عرض</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="wallWidth" value="3" step="0.01" min="0">
+                        <span class="input-group-text unit-length">m</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" id="thicknessLabel">ضخامت چیپس</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="chipsThickness" value="0.02" step="0.001" min="0">
+                        <span class="input-group-text unit-length">m</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- نسبت مخلوط -->
+        <h5 class="section-title" id="mortarMixTitle">
+            <i class="fas fa-mortar-pestle me-2"></i>نسبت مخلوط
+        </h5>
+        <div class="content">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label" id="cementLabel">سیمنت:</label>
+                    <input type="number" class="form-control" id="cementRatio" value="1" step="0.1" min="0">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" id="chipsLabel">چیپس:</label>
+                    <input type="number" class="form-control" id="chipsRatio" value="2" step="0.1" min="0">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" id="stoneDustLabel">سنگ‌دست:</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="stoneDustPercent" value="30" step="1" min="0" max="100">
+                        <span class="input-group-text">٪</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" id="wasteLabel">فیصدی ضایعات:</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="wastePercent" value="5" step="1" min="0" max="20">
+                        <span class="input-group-text">٪</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" id="dryVolumeLabel">حجم خشک:</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="dryVolume" value="1.52" step="0.01" min="0">
+                        <span class="input-group-text">m³</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" id="cementBagWeightLabel">وزن بوری سیمنت:</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="cementBagWeight" value="50" step="1" min="0">
+                        <span class="input-group-text">kg</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- قیمت‌ها -->
+        <h5 class="section-title" id="pricesTitle">
+            <i class="fas fa-coins me-2"></i>قیمت‌ها (اختیاری)
+        </h5>
+        <div class="content">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label" id="cementBagRateLabel">قیمت فی بوری سیمنت:</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="cementBagRate" value="0" step="1" min="0">
+                        <span class="input-group-text currency-symbol">؋</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" id="chipsCuttingRateLabel">قیمت برش چیپس (فی m²):</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="chipsCuttingRate" value="0" step="1" min="0">
+                        <span class="input-group-text currency-symbol">؋</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" id="chipsRateLabel">قیمت چیپس (فی کیلو):</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="chipsRate" value="0" step="1" min="0">
+                        <span class="input-group-text currency-symbol">؋</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- دکمه‌های اقدام -->
+        <div class="content">
+            <div class="action-buttons">
+                <button class="action-btn" onclick="window.print()">
+                    <i class="fas fa-print"></i> <span id="printBtn">پرینت</span>
+                </button>
+                <button class="action-btn" onclick="generateChipsPDF()">
+                    <i class="fas fa-file-pdf"></i> <span id="pdfBtn">PDF</span>
+                </button>
+                <button class="btn-calculate" onclick="calculateChips()">
+                    <i class="fas fa-calculator"></i> <span id="calculateBtn">محاسبه</span>
+                </button>
+                <button class="action-btn" onclick="shareChipsResults()">
+                    <i class="fas fa-share-alt"></i> <span id="shareBtn">شریک</span>
+                </button>
+                <button class="action-btn" onclick="saveChipsCalculation()">
+                    <i class="fas fa-save"></i> <span id="saveBtn">ذخیره</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- نتایج - دو جدول -->
+        <div class="row m-0">
+            <div class="col-md-6">
+                <div class="result-table">
+                    <h6 class="text-center mb-3" id="volumeResults">مقادیر حجمی</h6>
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th id="materialTh">مصالح</th>
+                                <th id="quantityTh">مقدار</th>
+                                <th id="unitTh">واحد</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td id="volumeText">حجم</td><td id="volume">-</td><td class="volume-unit">m³</td></tr>
+                            <tr><td id="dryMortarText">ملات خشک</td><td id="dryMortar">-</td><td class="volume-unit">m³</td></tr>
+                            <tr><td id="cementVolumeText">سیمنت</td><td id="cementVolume">-</td><td class="volume-unit">m³</td></tr>
+                            <tr><td id="chipsWeightText">وزن چیپس</td><td id="chipsWeight">-</td><td class="weight-unit">kg</td></tr>
+                            <tr><td id="stoneDustText">سنگ‌دست</td><td id="stoneDust">-</td><td class="volume-unit">m³</td></tr>
+                            <tr><td id="cementBagsText">بوری‌های سیمنت</td><td id="cementBags">-</td><td id="bagsUnit">بوری</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="result-table">
+                    <h6 class="text-center mb-3" id="costResults">قیمت‌ها</h6>
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th id="materialTh">مصالح</th>
+                                <th id="costTh">قیمت</th>
+                                <th id="unitTh">واحد</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td id="cementCostText">قیمت سیمنت</td><td id="cementCost">-</td><td class="currency-unit">؋</td></tr>
+                            <tr><td id="chipsCuttingCostText">قیمت برش چیپس</td><td id="chipsCuttingCost">-</td><td class="currency-unit">؋</td></tr>
+                            <tr><td id="chipsCostText">قیمت چیپس</td><td id="chipsCost">-</td><td class="currency-unit">؋</td></tr>
+                            <tr class="table-active"><td id="totalCostText">جمله قیمت</td><td id="totalCost">-</td><td class="currency-unit">؋</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- نمودار هزینه‌ها -->
+        <div class="chart-container">
+            <canvas id="chipsCostChart"></canvas>
+        </div>
+
+        <!-- تبدیل واحدها -->
+        <div class="unit-toggle" onclick="convertChipsUnits()">
+            <span class="badge">m³</span>
+            <span class="badge">ft³</span>
+            <span class="badge">yd³</span>
+            <span class="badge">brass</span>
+            <span class="float-left text-muted" id="clickToConvert">کلیک کنید برای تبدیل حجم</span>
+        </div>
+
+        <!-- فوتر -->
+        <div class="footer-info">
+            <span><i class="far fa-clock"></i> <span id="currentTime"></span></span>
+            <span><i class="fas fa-wifi"></i> <span id="speedText">۱۰۶ KB/s</span></span>
+            <span><i class="fas fa-battery-three-quarters"></i> <span id="batteryText">۱۰۰٪</span></span>
+        </div>
+    </div>
+
+    <!-- مودال تاریخچه -->
+    <div class="modal fade" id="chipsHistoryModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="historyModalTitle">تاریخچه محاسبات</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="chipsHistoryModalBody">
+                    <!-- تاریخچه اینجا نمایش داده می‌شود -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- فایل‌های جاوااسکریپت -->
+    <script src="chips-languages.js"></script>
+    <script src="chips-script.js"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
